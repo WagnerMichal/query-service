@@ -47,9 +47,15 @@ public class QueryController {
             return ResponseEntity.badRequest().body("Exactly one query parameter must be present");
         }
 
-        double result = airportCode != null ? airportTemperatureService.getTemperature(airportCode)
-                : stockSymbol  != null ? stockPriceService.getStockPrice(stockSymbol)
-                : expressionEvaluatorService.evaluate(expression);
+        double result;
+
+        if (airportCode != null) {
+            result = airportTemperatureService.getTemperature(airportCode);
+        } else if (stockSymbol != null) {
+            result = stockPriceService.getStockPrice(stockSymbol);
+        } else {
+            result = expressionEvaluatorService.evaluate(expression);
+        }
 
         if (!acceptHeader.contains(MediaType.APPLICATION_XML_VALUE)) {
             return ResponseEntity.ok()
